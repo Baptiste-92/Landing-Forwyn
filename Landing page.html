@@ -1,0 +1,1253 @@
+<!doctype html>
+<html lang="fr"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forwyn — Un jour à la fois, tu reprends le contrôle.</title>
+  <meta name="description" content="Forwyn transforme les périodes difficiles en petites missions claires, avec une progression visible et Ash, ton coach IA.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Open Graph / réseaux sociaux -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://forwyn.vercel.app/">
+  <meta property="og:title" content="Forwyn — Un jour à la fois, tu reprends le contrôle.">
+  <meta property="og:description" content="Forwyn transforme les périodes difficiles en petites missions claires, avec une progression visible et Ash, ton coach IA.">
+  <meta property="og:image" content="https://forwyn.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Forwyn — Un jour à la fois, tu reprends le contrôle.">
+  <meta name="twitter:description" content="Forwyn transforme les périodes difficiles en petites missions claires, avec une progression visible et Ash, ton coach IA.">
+  <meta name="twitter:image" content="https://forwyn.vercel.app/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&amp;family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0A0F;
+      --surface: #13131A;
+      --surface-soft: rgba(19, 19, 26, 0.72);
+      --text: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --violet: #9B6DFF;
+      --rose: #E040A0;
+      --gold: #FBBF24;
+      --error: #F87171;
+      --border: rgba(155, 109, 255, 0.2);
+      --border-strong: rgba(155, 109, 255, 0.36);
+      --cta: linear-gradient(135deg, #9B6DFF, #E040A0);
+      --cta-glow: 0 8px 32px rgba(155, 109, 255, 0.4);
+      --radius-card: 16px;
+      --radius-button: 14px;
+      --font: "Sora", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --wrap: min(1120px, calc(100% - 48px));
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% 8%, rgba(155, 109, 255, 0.18), transparent 30rem),
+        radial-gradient(circle at 8% 38%, rgba(224, 64, 160, 0.10), transparent 28rem),
+        var(--bg);
+      font-family: var(--font);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .section {
+      width: var(--wrap);
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+      gap: clamp(48px, 7vw, 92px);
+      align-items: center;
+      padding: 80px 0 96px;
+    }
+
+    .eyebrow {
+      width: fit-content;
+      margin: 0 0 24px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-secondary);
+      background: rgba(19, 19, 26, 0.6);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .hero-title {
+      max-width: 780px;
+      font-size: clamp(3.25rem, 8vw, 6.6rem);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    /* Le span hérite toujours de la taille du parent (clamp) — jamais de font-size fixe en px ici */
+    .hero-title span {
+      color: var(--violet);
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin-top: 28px;
+      color: var(--text-secondary);
+      font-size: clamp(1.08rem, 2vw, 1.25rem);
+      text-wrap: pretty;
+    }
+
+    .signup {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      max-width: 610px;
+      margin-top: 36px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(19, 19, 26, 0.72);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .signup input {
+      min-width: 0;
+      height: 56px;
+      padding: 0 18px;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      border-radius: 12px;
+      background: transparent;
+    }
+
+    .signup input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .cta {
+      min-height: 56px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: var(--radius-button);
+      color: var(--text);
+      background: var(--cta);
+      box-shadow: var(--cta-glow);
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+      white-space: nowrap;
+    }
+
+    .cta:hover:not(:disabled),
+    .cta:focus-visible:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 42px rgba(155, 109, 255, 0.48);
+    }
+
+    .cta:disabled {
+      opacity: 0.72;
+      cursor: default;
+      transform: none;
+    }
+
+    .form-message {
+      grid-column: 1 / -1;
+      margin: 2px 4px 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      min-height: 0;
+    }
+
+    .form-message.is-error {
+      color: var(--error);
+    }
+
+    .form-message.is-success {
+      color: var(--violet);
+    }
+
+    .live-counter {
+      margin-top: 14px;
+      min-height: 1.2em;
+      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      letter-spacing: -0.02em;
+    }
+
+    .live-counter strong {
+      color: var(--violet);
+      font-weight: 700;
+    }
+
+    .app-preview {
+      position: relative;
+      display: grid;
+      gap: 16px;
+    }
+
+    .app-preview::before {
+      content: "";
+      position: absolute;
+      inset: -28px -20px auto auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: rgba(155, 109, 255, 0.16);
+      filter: blur(40px);
+      z-index: -1;
+    }
+
+    .mockup-main,
+    .mini-card,
+    .step-card,
+    .screen-card,
+    .faq-item,
+    .footer-cta {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      background: var(--surface-soft);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+    }
+
+    .mockup-main {
+      padding: 24px;
+      min-height: 560px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 22px;
+      backdrop-filter: blur(16px);
+    }
+
+    .mockup-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* Icône générique de l'app (logo "F"), distincte du mascotte Ash affiché plus bas */
+    .avatar {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(251, 191, 36, 0.34), transparent 34%),
+        rgba(251, 191, 36, 0.08);
+      color: var(--gold);
+      font-weight: 800;
+    }
+
+    .mockup-kicker,
+    .screen-kicker {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mockup-name {
+      margin-top: 2px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .streak-pill {
+      padding: 10px 12px;
+      border: 1px solid rgba(251, 191, 36, 0.32);
+      border-radius: 999px;
+      color: var(--gold);
+      background: rgba(251, 191, 36, 0.08);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .xp-panel {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(10, 10, 15, 0.56);
+    }
+
+    .xp-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+    }
+
+    .xp-bar {
+      height: 10px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .xp-fill {
+      width: 68%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--cta);
+      box-shadow: 0 0 24px rgba(155, 109, 255, 0.42);
+    }
+
+    .mission-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mission {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .check-dot {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--text);
+      background: rgba(155, 109, 255, 0.24);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .mission-title {
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .mission-meta {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .mission-xp {
+      color: var(--violet);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .ash-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+      margin-top: auto;
+      padding: 18px;
+      border: 1px solid rgba(155, 109, 255, 0.24);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(155, 109, 255, 0.14), rgba(224, 64, 160, 0.08));
+    }
+
+    .ash-face {
+      width: 74px;
+      height: 74px;
+      position: relative;
+      border-radius: 18px;
+      background: url("/ash-mascot.png") center 15% / contain no-repeat;
+      filter: drop-shadow(0 10px 20px rgba(155, 109, 255, 0.4));
+    }
+
+    /* Version plus grande pour l'écran "Ash — Évolution", où le mascotte est l'élément principal */
+    #screen-ash .ash-face {
+      width: 100%;
+      height: 180px;
+      margin-bottom: 4px;
+      background-position: center 8%;
+    }
+
+    .ash-copy strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+
+    .ash-copy span {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .mini-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .mini-card {
+      min-height: 132px;
+      padding: 18px;
+      background: rgba(19, 19, 26, 0.68);
+    }
+
+    .mini-number {
+      margin-top: 22px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 1.7rem;
+      font-weight: 800;
+    }
+
+    .section-pad {
+      padding: 72px 0;
+    }
+
+    .section-heading {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .section-label {
+      margin-bottom: 10px;
+      color: var(--violet);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+      text-wrap: balance;
+    }
+
+    .section-copy {
+      margin-top: 14px;
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+      max-width: 630px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .step-card {
+      min-height: 258px;
+      padding: 24px;
+      background: rgba(19, 19, 26, 0.64);
+    }
+
+    .step-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 42px;
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      color: var(--violet);
+      background: rgba(155, 109, 255, 0.10);
+      font-size: 1.25rem;
+    }
+
+    .step-card h3 {
+      font-size: 1.22rem;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .step-card p {
+      margin-top: 10px;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .screen-card {
+      min-height: 456px;
+      padding: 20px;
+      background: rgba(19, 19, 26, 0.64);
+    }
+
+    .screen-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .screen-title {
+      margin-top: 3px;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .screen-caption {
+      margin-top: 18px;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    .screen-badge {
+      height: fit-content;
+      padding: 7px 9px;
+      border: 1px solid rgba(155, 109, 255, 0.28);
+      border-radius: 999px;
+      color: var(--violet);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-box strong {
+      display: block;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 1.2rem;
+    }
+
+    .stat-box span {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .task-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task-line {
+      padding: 13px;
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    .task-line.is-active {
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      background: rgba(155, 109, 255, 0.13);
+    }
+
+    .level-track {
+      display: grid;
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .level {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .level-mark {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(155, 109, 255, 0.18);
+      color: var(--violet);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .level.is-gold .level-mark {
+      color: var(--gold);
+      background: rgba(251, 191, 36, 0.12);
+    }
+
+    .level strong {
+      display: block;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .level span {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .faq-wrap {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: start;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(19, 19, 26, 0.64);
+    }
+
+    .faq-button {
+      width: 100%;
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 0 20px;
+      border: 0;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      color: var(--violet);
+      transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .faq-item[open] .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-panel {
+      padding: 0 20px 20px;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+    }
+
+    .faq-item summary {
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .footer-cta {
+      margin: 78px auto 0;
+      padding: clamp(28px, 5vw, 52px);
+      background:
+        linear-gradient(135deg, rgba(155, 109, 255, 0.18), rgba(224, 64, 160, 0.10)),
+        rgba(19, 19, 26, 0.72);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(360px, 0.7fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .footer-title {
+      max-width: 640px;
+      font-size: clamp(2rem, 4.6vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      text-wrap: balance;
+    }
+
+    .footer-copy {
+      max-width: 520px;
+      margin-top: 14px;
+      color: var(--text-secondary);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      margin: 28px 0 34px;
+      color: var(--text-muted);
+      font-size: 0.86rem;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      color: var(--text);
+    }
+
+    @media (max-width: 1023px) {
+      :root {
+        --wrap: min(100% - 40px, 760px);
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 42px;
+        padding: 64px 0 72px;
+      }
+
+      .hero-title {
+        max-width: 720px;
+      }
+
+      .app-preview {
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      .steps-grid,
+      .screens,
+      .faq-wrap,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step-card {
+        min-height: 0;
+      }
+
+      .step-icon {
+        margin-bottom: 28px;
+      }
+
+      .screens {
+        max-width: 620px;
+        margin: 0 auto;
+      }
+
+      .footer-cta .signup {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 430px) {
+      :root {
+        --wrap: calc(100% - 28px);
+      }
+
+      body {
+        background:
+          radial-gradient(circle at 70% 0%, rgba(155, 109, 255, 0.18), transparent 20rem),
+          var(--bg);
+      }
+
+      .hero {
+        padding: 42px 0 56px;
+      }
+
+      .eyebrow {
+        margin-bottom: 18px;
+        font-size: 0.68rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2.65rem, 14vw, 3.7rem);
+        letter-spacing: -0.06em;
+      }
+
+      .hero-copy {
+        margin-top: 20px;
+        font-size: 1rem;
+      }
+
+      .signup {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-top: 28px;
+      }
+
+      .signup input,
+      .cta {
+        width: 100%;
+      }
+
+      .cta {
+        padding: 0 16px;
+        white-space: normal;
+      }
+
+      .mockup-main {
+        min-height: auto;
+        padding: 18px;
+      }
+
+      .mini-strip,
+      .stat-row {
+        grid-template-columns: 1fr;
+      }
+
+      .mockup-top {
+        align-items: flex-start;
+      }
+
+      .streak-pill {
+        font-size: 0.72rem;
+      }
+
+      .mission {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .mission-xp {
+        grid-column: 2;
+      }
+
+      .ash-card {
+        grid-template-columns: 1fr;
+      }
+
+      .ash-face {
+        width: 66px;
+        height: 66px;
+        border-radius: 22px;
+      }
+
+      .section-pad {
+        padding: 52px 0;
+      }
+
+      .section-heading {
+        margin-bottom: 22px;
+      }
+
+      .section-title {
+        font-size: 2.05rem;
+      }
+
+      .section-copy {
+        font-size: 0.96rem;
+      }
+
+      .step-card,
+      .screen-card {
+        padding: 18px;
+      }
+
+      .screen-card {
+        min-height: auto;
+      }
+
+      .faq-button {
+        min-height: 66px;
+        padding: 0 16px;
+      }
+
+      .faq-panel {
+        padding: 0 16px 18px;
+      }
+
+      .footer-cta {
+        margin-top: 52px;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page" data-od-id="main">
+    <section class="section hero" data-od-id="hero">
+      <div data-od-id="hero-copy">
+        <p class="eyebrow" data-od-id="hero-eyebrow">Forwyn · missions quotidiennes</p>
+        <h1 class="hero-title" data-od-id="hero-title">Un jour à la fois, <span>tu reprends le contrôle.</span></h1>
+        <p class="hero-copy" data-od-id="hero-subheadline">Forwyn transforme les périodes difficiles en petites missions claires, avec une progression visible et Ash, ton coach IA, qui t'aide à rester en mouvement sans te brusquer.</p>
+        <form class="signup" data-od-id="hero-form" data-waitlist-form data-source="hero">
+          <label aria-label="Adresse email">
+            <input type="email" name="email" placeholder="ton@email.com" autocomplete="email" required="" data-od-id="hero-email-input">
+          </label>
+          <button class="cta" type="submit" data-od-id="hero-cta">Rejoindre la liste d'attente</button>
+          <p class="form-message" data-form-message role="status" aria-live="polite"></p>
+        </form>
+        <p class="live-counter" data-od-id="hero-counter" data-waitlist-counter></p>
+      </div>
+
+      <div class="app-preview" aria-label="Aperçu du tableau de bord Forwyn" data-od-id="hero-app-mockup">
+        <article class="mockup-main" data-od-id="dashboard-mockup">
+          <div class="mockup-top">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div class="avatar" aria-hidden="true">F</div>
+              <div>
+                <p class="mockup-kicker">Aujourd'hui</p>
+                <p class="mockup-name">Revenir doucement</p>
+              </div>
+            </div>
+            <div class="streak-pill" data-od-id="streak-pill">7 jours</div>
+          </div>
+
+          <div class="xp-panel" data-od-id="xp-panel">
+            <div class="xp-line">
+              <span>Niveau 03</span>
+              <span>680 / 1000 XP</span>
+            </div>
+            <div class="xp-bar" aria-hidden="true"><div class="xp-fill"></div></div>
+          </div>
+
+          <div class="mission-list" data-od-id="mission-preview-list">
+            <div class="mission">
+              <span class="check-dot">✓</span>
+              <div>
+                <p class="mission-title">Ranger un coin visible</p>
+                <p class="mission-meta">5 minutes · action simple</p>
+              </div>
+              <span class="mission-xp">+40 XP</span>
+            </div>
+            <div class="mission">
+              <span class="check-dot">2</span>
+              <div>
+                <p class="mission-title">Écrire ce que tu ne veux plus porter</p>
+                <p class="mission-meta">journal · privé</p>
+              </div>
+              <span class="mission-xp">+60 XP</span>
+            </div>
+            <div class="ash-card" data-od-id="ash-card">
+              <div class="ash-face" aria-hidden="true"></div>
+              <p class="ash-copy"><strong>Ash évolue avec toi.</strong><span>Moins de pression, plus de rythme: une mission à la fois.</span></p>
+            </div>
+          </div>
+        </article>
+        <div class="mini-strip" aria-hidden="true">
+          <div class="mini-card">
+            <p class="mockup-kicker">Élan</p>
+            <p class="mini-number">actif</p>
+          </div>
+          <div class="mini-card">
+            <p class="mockup-kicker">Prochaine étape</p>
+            <p class="mini-number">21:00</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-pad" data-od-id="how-it-works">
+      <div class="section-heading">
+        <p class="section-label">Comment ça marche</p>
+        <h2 class="section-title" data-od-id="how-title">Pas un grand plan. Trois pas assez petits pour commencer.</h2>
+      </div>
+      <div class="steps-grid">
+        <article class="step-card" data-od-id="step-diagnostic">
+          <div class="step-icon" aria-hidden="true">?</div>
+          <h3>Réponds à quelques questions</h3>
+          <p>Forwyn comprend ton énergie du moment, ton contexte et ce qui te bloque.</p>
+        </article>
+        <article class="step-card" data-od-id="step-missions">
+          <div class="step-icon" aria-hidden="true">→</div>
+          <h3>Reçois tes missions du jour</h3>
+          <p>Chaque action est courte, concrète et pensée pour une journée réaliste.</p>
+        </article>
+        <article class="step-card" data-od-id="step-progression">
+          <div class="step-icon" aria-hidden="true">XP</div>
+          <h3>Vois ta progression, jour après jour</h3>
+          <p>L'XP, la série et les jalons rendent tes efforts visibles sans te juger.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-pad" data-od-id="product-preview">
+      <div class="section-heading">
+        <p class="section-label">Aperçu produit</p>
+        <h2 class="section-title" data-od-id="preview-title">Un espace sombre, calme, fait pour reprendre pied.</h2>
+        <p class="section-copy">Les écrans restent concentrés sur ce qui aide vraiment: savoir quoi faire maintenant, voir l'élan revenir, et sentir qu'Ash accompagne sans infantiliser.</p>
+      </div>
+      <div class="screens">
+        <article class="screen-card" data-od-id="screen-dashboard">
+          <div class="screen-head">
+            <div>
+              <p class="screen-kicker">Tableau de bord</p>
+              <p class="screen-title">Le jour en cours</p>
+            </div>
+            <span class="screen-badge">NIV. 03</span>
+          </div>
+          <div class="stat-row">
+            <div class="stat-box"><strong>68%</strong><span>barre XP</span></div>
+            <div class="stat-box"><strong>7</strong><span>jours de suite</span></div>
+          </div>
+          <div class="xp-bar" aria-hidden="true"><div class="xp-fill"></div></div>
+          <p class="screen-caption">Un état clair: progression, série, et prochaine mission sans bruit autour.</p>
+        </article>
+
+        <article class="screen-card" data-od-id="screen-missions">
+          <div class="screen-head">
+            <div>
+              <p class="screen-kicker">Missions</p>
+              <p class="screen-title">Actions du jour</p>
+            </div>
+            <span class="screen-badge">3</span>
+          </div>
+          <div class="task-stack">
+            <div class="task-line is-active">Sortir marcher 8 minutes, sans objectif.</div>
+            <div class="task-line">Envoyer un message à une personne sûre.</div>
+            <div class="task-line">Noter une chose que tu as réussi aujourd'hui.</div>
+          </div>
+          <p class="screen-caption">Des missions simples, formulées comme des appuis, pas comme des injonctions.</p>
+        </article>
+
+        <article class="screen-card" id="screen-ash" data-od-id="screen-ash">
+          <div class="screen-head">
+            <div>
+              <p class="screen-kicker">Ash</p>
+              <p class="screen-title">Évolution</p>
+            </div>
+            <span class="screen-badge">JALONS</span>
+          </div>
+          <div class="ash-face" aria-hidden="true"></div>
+          <div class="level-track">
+            <div class="level">
+              <span class="level-mark">01</span>
+              <div><strong>Présence</strong><span>Ash apprend ton rythme.</span></div>
+            </div>
+            <div class="level">
+              <span class="level-mark">03</span>
+              <div><strong>Élan</strong><span>Les missions deviennent plus fines.</span></div>
+            </div>
+            <div class="level is-gold">
+              <span class="level-mark">07</span>
+              <div><strong>Jalon</strong><span>Un moment important est marqué.</span></div>
+            </div>
+          </div>
+          <p class="screen-caption">Le doré reste réservé aux jalons pour garder la récompense rare.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-pad" data-od-id="faq">
+      <div class="faq-wrap">
+        <div class="section-heading">
+          <p class="section-label">Questions</p>
+          <h2 class="section-title" data-od-id="faq-title">Avant de rejoindre la beta.</h2>
+          <p class="section-copy">Forwyn est conçu pour accompagner un passage difficile, pas pour remplacer un suivi professionnel quand il est nécessaire.</p>
+        </div>
+        <div class="faq-list" data-od-id="faq-list">
+          <details class="faq-item" data-od-id="faq-free">
+            <summary class="faq-button"><span>C'est gratuit ?</span><span class="faq-icon">+</span></summary>
+            <div class="faq-panel">L'inscription à la liste d'attente est gratuite. Les modalités de lancement seront partagées avant l'ouverture.</div>
+          </details>
+          <details class="faq-item" data-od-id="faq-start">
+            <summary class="faq-button"><span>Quand puis-je commencer ?</span><span class="faq-icon">+</span></summary>
+            <div class="faq-panel">Les premiers accès seront envoyés par vagues aux personnes inscrites, avec un onboarding court.</div>
+          </details>
+          <details class="faq-item" data-od-id="faq-ash">
+            <summary class="faq-button"><span>Qui est Ash ?</span><span class="faq-icon">+</span></summary>
+            <div class="faq-panel">Ash est le coach IA de Forwyn. Il ajuste les missions, suit ton rythme et évolue avec ta progression.</div>
+          </details>
+          <details class="faq-item" data-od-id="faq-data">
+            <summary class="faq-button"><span>Mes données sont-elles protégées ?</span><span class="faq-icon">+</span></summary>
+            <div class="faq-panel">Les réponses personnelles sont traitées comme sensibles. Les contrôles de confidentialité seront visibles dès l'inscription.</div>
+          </details>
+        </div>
+      </div>
+
+      <aside class="footer-cta" data-od-id="footer-cta">
+        <div class="footer-grid">
+          <div>
+            <h2 class="footer-title" data-od-id="footer-title">Le prochain petit pas peut commencer ici.</h2>
+            <p class="footer-copy">Entre ton email pour recevoir l'accès Forwyn quand les premières places ouvrent.</p>
+          </div>
+          <form class="signup" data-od-id="footer-form" data-waitlist-form data-source="footer" style="grid-template-columns: 1fr; gap: 8px;">
+            <label aria-label="Adresse email">
+              <input type="email" name="email" placeholder="ton@email.com" autocomplete="email" required="" data-od-id="footer-email-input" style="width: 100%;">
+            </label>
+            <button class="cta" type="submit" data-od-id="footer-cta-button" style="width: 100%; font-size: 14px;">Rejoindre la liste d'attente</button>
+            <p class="form-message" data-form-message role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="section" data-od-id="footer">
+      <div class="footer-links" data-od-id="legal-links">
+        <a href="#" data-od-id="link-terms">CGU</a>
+        <a href="#" data-od-id="link-privacy">Confidentialité</a>
+        <a href="mailto:contact@forwyn.app" data-od-id="link-contact">contact</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // --- Config Supabase ---
+    const SUPABASE_URL = "https://xbhfijldggpunfirdqmw.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_A6l0MZG5Amn8OABar0O6fA_yQnf71k_";
+
+    async function insertWaitlistEmail(email, source) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist_emails`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({ email, source })
+      });
+
+      if (!res.ok) {
+        const status = res.status;
+        let body = {};
+        try { body = await res.json(); } catch (_) {}
+        const isDuplicate = status === 409 || (body.message || "").toLowerCase().includes("duplicate");
+        const error = new Error(isDuplicate ? "duplicate" : (body.message || "unknown"));
+        error.isDuplicate = isDuplicate;
+        throw error;
+      }
+    }
+
+    async function fetchWaitlistCount() {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_waitlist_count`, {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      });
+      if (!res.ok) throw new Error("count_failed");
+      const count = await res.json();
+      return typeof count === "number" ? count : Number(count);
+    }
+
+    function setMessage(form, text, kind) {
+      const el = form.querySelector("[data-form-message]");
+      if (!el) return;
+      el.textContent = text || "";
+      el.classList.toggle("is-error", kind === "error");
+      el.classList.toggle("is-success", kind === "success");
+    }
+
+    document.querySelectorAll("[data-waitlist-form]").forEach((form) => {
+      const button = form.querySelector(".cta");
+      const input = form.querySelector("input[type=email]");
+      const source = form.dataset.source || "unknown";
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setMessage(form, "");
+
+        if (!input.checkValidity()) {
+          input.reportValidity();
+          return;
+        }
+
+        const email = input.value.trim();
+        button.disabled = true;
+        const originalText = button.textContent;
+        button.textContent = "Envoi en cours…";
+
+        try {
+          await insertWaitlistEmail(email, source);
+          button.textContent = "Inscription confirmée";
+          setMessage(form, "Tu es sur la liste. On te prévient dès l'ouverture.", "success");
+          input.value = "";
+          refreshCounters();
+        } catch (err) {
+          button.disabled = false;
+          button.textContent = originalText;
+          if (err.isDuplicate) {
+            setMessage(form, "Cet email est déjà inscrit.", "error");
+          } else {
+            setMessage(form, "Une erreur est survenue, réessaie dans un instant.", "error");
+          }
+        }
+      });
+    });
+
+    async function refreshCounters() {
+      const counters = document.querySelectorAll("[data-waitlist-counter]");
+      if (!counters.length) return;
+      try {
+        const count = await fetchWaitlistCount();
+        counters.forEach((el) => {
+          el.innerHTML = `<strong>${count}</strong> personne${count === 1 ? "" : "s"} déjà inscrite${count === 1 ? "" : "s"}`;
+        });
+      } catch (_) {
+        // Si le count échoue, on masque proprement plutôt que d'afficher un placeholder cassé
+        counters.forEach((el) => { el.textContent = ""; });
+      }
+    }
+
+    refreshCounters();
+  </script>
+</body></html>
