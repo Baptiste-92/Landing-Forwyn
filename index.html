@@ -1151,6 +1151,13 @@
     const SUPABASE_URL = "https://xbhfijldggpunfirdqmw.supabase.co";
     const SUPABASE_KEY = "sb_publishable_A6l0MZG5Amn8OABar0O6fA_yQnf71k_";
 
+    function detectDevice() {
+      const ua = navigator.userAgent;
+      if (/iPhone|iPad|iPod/.test(ua)) return "ios";
+      if (/Android/.test(ua)) return "android";
+      return "other";
+    }
+
     async function insertWaitlistEmail(email, source) {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist_emails`, {
         method: "POST",
@@ -1160,7 +1167,7 @@
           "Content-Type": "application/json",
           "Prefer": "return=minimal"
         },
-        body: JSON.stringify({ email, source })
+        body: JSON.stringify({ email, source, device: detectDevice() })
       });
 
       if (!res.ok) {
