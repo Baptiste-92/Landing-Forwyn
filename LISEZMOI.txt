@@ -1,0 +1,5 @@
+Hostinger > Gestionnaire de fichiers > public_html : y déposer TOUT le contenu de ce dossier
+(index.html, favicon.svg, og-image.png, assets/, support/, privacy/, terms/).
+Pages : forwyn.fr, forwyn.fr/support/, forwyn.fr/privacy/, forwyn.fr/terms/
+Lien App Store : après publication, remplacer dans index.html le badge "Bientôt sur l'App Store"
+par <a href="https://apps.apple.com/fr/app/id6812065775">…</a>
